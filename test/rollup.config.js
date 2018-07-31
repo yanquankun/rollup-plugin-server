@@ -1,12 +1,17 @@
-import serve from 'rollup-plugin-serve'
+import path from 'path'
+import serve from '../dist/index.es.js'
 
 export default {
-  entry: 'entry.js',
-  dest: 'dest.js',
+  input: 'test/entry.js',
+  output: {
+    file: 'test/dest.js',
+    format: 'cjs',
+  },
   plugins: [
     serve({
+      allowCrossOrigin: true,
       historyApiFallback: true,
-      contentBase: ['.', 'base1', 'base2']
+      contentBase: path.dirname(__dirname)
     })
   ]
 }

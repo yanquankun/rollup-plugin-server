@@ -1,32 +1,33 @@
 {
-  "name": "rollup-plugin-serve",
-  "version": "0.4.2",
+  "name": "rollup-plugin-server",
+  "version": "0.4.3",
   "description": "Serve your rolled up bundle",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "build": "rollup -c -f cjs -o dist/index.cjs.js && rollup -c -f es -o dist/index.es.js",
-    "dev": "rollup -cw -f cjs -o dist/index.cjs.js",
+    "dev": "rollup -cw -f es -o dist/index.es.js",
+    "test": "rollup -c test/rollup.config.js",
     "lint": "standard rollup.config.js src/**",
     "prepare": "npm run build"
   },
   "keywords": [
     "rollup",
     "rollup-plugin",
-    "serve",
+    "server",
     "dev-server",
     "static"
   ],
   "license": "MIT",
-  "author": "Thomas Ghysels <info@thomasg.be>",
-  "homepage": "https://github.com/thgh/rollup-plugin-serve",
+  "author": "Genie88 <genie88@163.com>",
+  "homepage": "https://github.com/genie88/rollup-plugin-server",
   "bugs": {
-    "url": "https://github.com/thgh/rollup-plugin-serve/issues"
+    "url": "https://github.com/genie88/rollup-plugin-server/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thgh/rollup-plugin-serve"
+    "url": "https://github.com/genie88/rollup-plugin-server"
   },
   "files": [
     "dist"

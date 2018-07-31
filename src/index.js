@@ -6,7 +6,7 @@ import { resolve } from 'path'
 import mime from 'mime'
 import opener from 'opener'
 
-export default function serve (options = { contentBase: '' }) {
+export default function serve(options = { contentBase: '' }) {
   if (Array.isArray(options) || typeof options === 'string') {
     options = { contentBase: options }
   }
@@ -25,8 +25,25 @@ export default function serve (options = { contentBase: '' }) {
       response.setHeader(key, options.headers[key])
     })
 
+    // support cors request
+    if (options.allowCrossOrigin) {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Request-Method', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+      response.setHeader('Access-Control-Allow-Headers', '*');
+
+      if (request.method === 'OPTIONS' ) {
+        response.writeHead(200);
+        response.end();
+        return;
+      }
+    }
+
     readFileFromContentBase(options.contentBase, urlPath, function (error, content, filePath) {
       if (!error) {
+        if (hasRange(request)) {
+          return serveWithRanges(request, response, content)
+        }
         return found(response, filePath, content)
       }
       if (error.code !== 'ENOENT') {
@@ -76,7 +93,7 @@ export default function serve (options = { contentBase: '' }) {
 
   return {
     name: 'serve',
-    ongenerate () {
+    ongenerate() {
       if (!running) {
         running = true
 
@@ -95,7 +112,7 @@ export default function serve (options = { contentBase: '' }) {
   }
 }
 
-function readFileFromContentBase (contentBase, urlPath, callback) {
+function readFileFromContentBase(contentBase, urlPath, callback) {
   let filePath = resolve(contentBase[0] || '.', '.' + urlPath)
 
   // Load index.html in directories
@@ -114,23 +131,49 @@ function readFileFromContentBase (contentBase, urlPath, callback) {
   })
 }
 
-function notFound (response, filePath) {
+function notFound(response, filePath) {
   response.writeHead(404)
   response.end('404 Not Found' +
     '\n\n' + filePath +
     '\n\n(rollup-plugin-serve)', 'utf-8')
 }
 
-function found (response, filePath, content) {
+function found(response, filePath, content) {
   response.writeHead(200, { 'Content-Type': mime.lookup(filePath) })
   response.end(content, 'utf-8')
 }
 
-function green (text) {
+function hasRange(request) {
+  var range = request.headers.range || ''
+  var parts = range.replace(/bytes=/, "").split("-");
+  var partialstart = parts[0];
+  var partialend = parts[1];
+  return partialstart && partialend
+}
+
+function serveWithRanges(request, response, content) {
+  var range = request.headers.range;
+  var total = content.length;
+  var parts = range.replace(/bytes=/, "").split("-");
+  var partialstart = parts[0];
+  var partialend = parts[1];
+
+  var start = parseInt(partialstart, 10);
+  var end = partialend ? parseInt(partialend, 10) : total;
+  var chunksize = (end - start);
+  response.writeHead(206, {
+    "Content-Range": "bytes " + start + "-" + end + "/" + total,
+    "Accept-Ranges": "bytes",
+    "Content-Length": chunksize
+  });
+  response.end(content.slice(start, end));
+}
+
+function green(text) {
   return '\u001b[1m\u001b[32m' + text + '\u001b[39m\u001b[22m'
 }
 
-function closeServerOnTermination (server) {
+function closeServerOnTermination(server) {
   const terminationSignals = ['SIGINT', 'SIGTERM']
   terminationSignals.forEach((signal) => {
     process.on(signal, () => {

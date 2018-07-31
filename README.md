@@ -1,30 +1,16 @@
 # Rollup plugin to serve the bundle
-
-<a href="LICENSE">
-  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg" alt="Software License" />
-</a>
-<a href="https://github.com/thgh/rollup-plugin-serve/issues">
-  <img src="https://img.shields.io/github/issues/thgh/rollup-plugin-serve.svg" alt="Issues" />
-</a>
-<a href="http://standardjs.com/">
-  <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
-</a>
-<a href="https://npmjs.org/package/rollup-plugin-serve">
-  <img src="https://img.shields.io/npm/v/rollup-plugin-serve.svg?style=flat-squar" alt="NPM" />
-</a>
-<a href="https://github.com/thgh/rollup-plugin-serve/releases">
-  <img src="https://img.shields.io/github/release/thgh/rollup-plugin-serve.svg" alt="Latest Version" />
-</a>
+Adopted from https://github.com/thgh/rollup-plugin-serve
+Add cors & range-header supports
 
 ## Installation
 ```
-npm install --save-dev rollup-plugin-serve
+npm install --save-dev rollup-plugin-server
 ```
 
 ## Usage
 ```js
 // rollup.config.js
-import serve from 'rollup-plugin-serve'
+import serve from 'rollup-plugin-server'
 
 export default {
   input: 'entry.js',
@@ -57,6 +43,9 @@ serve({
 
   // Multiple folders to serve from
   contentBase: ['dist', 'static'],
+
+  // Set to true to allow cors request
+  allowCrossOrigin: false,
 
   // Set to true to return index.html instead of 404
   historyApiFallback: false,
@@ -95,13 +84,13 @@ To get it running:
 
 ## Credits
 
-- [Thomas Ghysels](https://github.com/thgh)
+- [Genie88](https://github.com/genie88)
 - [All Contributors][link-contributors]
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
-[link-author]: https://github.com/thgh
+[link-author]: https://github.com/genie88
 [link-contributors]: ../../contributors
-[rollup-plugin-serve]: https://www.npmjs.com/package/rollup-plugin-serve
+[rollup-plugin-serve]: https://www.npmjs.com/package/rollup-plugin-server
