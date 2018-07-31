@@ -4,13 +4,13 @@ Add cors & range-header supports
 
 ## Installation
 ```
-npm install --save-dev rollup-plugin-server
+npm install --save-dev rollup-plugin-dev-server
 ```
 
 ## Usage
 ```js
 // rollup.config.js
-import serve from 'rollup-plugin-server'
+import serve from 'rollup-plugin-dev-server'
 
 export default {
   input: 'entry.js',
