@@ -39,6 +39,13 @@ export default function serve(options = { contentBase: '' }) {
       }
     }
 
+    // need proxy 
+    if(options.proxy) {
+      let match = matchProxy(options.proxy, request)
+      proxy.web(request, response, options.proxy[match]);
+      return;
+    }
+
     readFileFromContentBase(options.contentBase, urlPath, function (error, content, filePath) {
       if (!error) {
         if (hasRange(request)) {
@@ -110,6 +117,13 @@ export default function serve(options = { contentBase: '' }) {
       }
     }
   }
+}
+
+function matchProxy(proxy, request){
+  let match = '';
+  const url = request.url;
+  const urlPath = decodeURI(request.url.split('?')[0]);
+  proxy.forEach()
 }
 
 function readFileFromContentBase(contentBase, urlPath, callback) {
