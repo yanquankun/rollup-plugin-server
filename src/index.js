@@ -1,4 +1,4 @@
-import { readFile } from 'fs'
+import { readFile, write } from 'fs'
 import { createServer as createHttpsServer } from 'https'
 import { createServer } from 'http'
 import { resolve } from 'path'
@@ -100,7 +100,7 @@ export default function serve(options = { contentBase: '' }) {
 
   return {
     name: 'serve',
-    ongenerate() {
+    writeBundle() {
       if (!running) {
         running = true
 
